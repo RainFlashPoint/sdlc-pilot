@@ -181,6 +181,8 @@ distilled-from: [ai-evals.md, gsd-eval-review, benchmark, benchmark-models, tb-r
 # Eval-Bench Report: <feature/scope>
 scope: feature | iteration | full
 updated: <stamp>
+verification-outcome: PASS | CODE_FAILED | ENV_BLOCKED | INCONCLUSIVE
+environment-fingerprint: <运行时/模型或 harness 版本 + 数据集 hash；脱敏>
 spec-source: .sdlc/spec.md#evals          # rubric/数据集/阈值的来源（spec→validate 契约）
 dataset: <path>  size: <n>                # reference dataset 位置与样本数
 baseline: .sdlc/validate/baselines/eval-<scope>-<prev>.json   # 对比基线（无则首跑）

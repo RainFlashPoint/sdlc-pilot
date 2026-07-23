@@ -252,6 +252,11 @@ distilled-from: [design-review, devex-review, web-api-reverse-engineering, brows
 每条旅程/用例/修复，按统一结构记录。**Method 三级是硬约束**（蒸馏自 devex-review）：
 
 ```markdown
+# E2E Report: <feature/scope>
+- verification-outcome: PASS | CODE_FAILED | ENV_BLOCKED | INCONCLUSIVE
+- executed-at: <stamp>
+- environment-fingerprint: <运行时/浏览器/目标版本；脱敏>
+
 ### Journey: <旅程名>  | Modality: Web | OpenAPI | App
 - Scope: feature | iteration | full-chain
 - Entry: <URL / endpoint / app screen>

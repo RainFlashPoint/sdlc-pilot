@@ -2,6 +2,18 @@
 
 遵循语义化版本。格式参考 Keep a Changelog。
 
+## [0.18.2] — 2026-07-23
+
+### Changed
+- **Build 执行回合纪律**：用户授权开始/继续实现后，同一回合必须产生真实读取、修改或验证动作；禁止只报“开始”便结束，完成声明必须附文件/命令/阻塞证据，上下文压缩不视为 BLOCKED，大任务自动收敛到最小 TDD 闭环。
+- **先取证再询问**：索取测试账号、参数、环境或重复授权前，先搜索仓库文档、fixture、历史验证产物和可用知识库；仍有真实缺口时才说明来源、缺口和影响并提出最小问题。已授权且非生产、影响可控的动作不重复索取同义授权。
+- **验证结果归因**：validate 在阶段门控之外统一记录 `PASS / CODE_FAILED / ENV_BLOCKED / INCONCLUSIVE`，并把执行时间与脱敏环境指纹写入 HANDOFF/STATE，避免把环境缺口误报成代码失败或用“环境问题”掩盖回归。
+
+### Verification
+- `python3 scripts/test_backlog.py`：48 tests PASS。
+- `python3 scripts/test_contrast_check.py`：36 tests PASS。
+- `bash scripts/validate-skills`：PASS。
+
 ## [0.18.1] — 2026-06-26
 
 ### Changed

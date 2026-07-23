@@ -35,6 +35,7 @@ for mf in "$REF"/validate-modes/*.md; do
   m="$(basename "$mf" .md)"
   grep -q "$m" "$REF/role-routing.md" || err "模式 '$m' 未在 role-routing.md"
   grep -q "$m" "$ROOT/sdlc-validate/SKILL.md" || err "模式 '$m' 未被 sdlc-validate 引用"
+  grep -q 'verification-outcome' "$mf" || err "模式 '$m' 报告 schema 未记录验证结果归因"
 done
 ok "validate 模式交叉引用检查完成($(ls "$REF"/validate-modes/*.md | wc -l | tr -d ' ') 个)"
 

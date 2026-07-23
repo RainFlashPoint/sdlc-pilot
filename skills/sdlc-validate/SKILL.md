@@ -15,6 +15,8 @@ description: >
 
 # sdlc-validate — 验证中枢(调度层)
 
+> **先取证，再询问**：涉及测试账号、外部参数、环境信息或外部状态写入时，先搜索仓库文档、fixture、示例配置、历史验证产物和当前可用知识库。仍缺失或证据冲突时，说明已检查来源、确切缺口及影响，再提出最小问题。用户已明确授权当前范围且证据表明是非生产、影响可控的动作时，不重复索取同义授权；环境不明、可能触及生产、影响不可控或不可逆时才进入人工门禁。
+
 你是 SDLC 验证阶段的**调度员**。validate 是夹在 **build(实现)** 与 **review(评审)** 之间的
 独立阶段,职责是:把"应该能用"变成"已验证能用"的硬证据。
 
@@ -159,14 +161,19 @@ modes := resolve( changed-files × PROFILE.surface-map × role-routing 规则 )
 所有 active mode 跑完后,本调度层**汇总**:
 
 1. 读每个模式报告的 `result`(PASS / GATED / BLOCKED)。
-2. **阶段总判定**:
+2. **先给执行结果归因**（每个模式报告必须写明）：
+   - `PASS`：命令真实执行并通过。
+   - `CODE_FAILED`：有明确编译错误、断言失败或代码运行异常证据；回 build。
+   - `ENV_BLOCKED`：缺运行时、依赖仓库、凭据、网络或外部服务；不伪装成代码失败，记录确切环境缺口。
+   - `INCONCLUSIVE`：证据不足或结果冲突；保留日志并转到具备条件的环境或人工复验。
+3. **阶段总判定**:
    - 全部模式 PASS → validate 阶段 = **PASS**,可进 review。
    - 任一模式 GATED(覆盖率不达标 / 旅程失败已 escalate / eval 未达阈值)→ 阶段 = **gated**,
      STATE.next 指回缺口对应阶段(多为 `sdlc-build`)。
    - 任一模式 BLOCKED(测试基建起不来 / eval 装置坏 / 缺评估标准且无法回退)→ 阶段 = **blocked**,
      在 STATE.Decisions log 记原因。
-3. 写一份**阶段汇总**(可放 `.sdlc/validate/summary.md` 或直接体现在 STATE),列每个模式的结果与去向。
-4. **输出 `## HANDOFF` → 回写 STATE.md**(经 driver / 单写者,见 §6):更新 stage / status / gates / validate-modes / next。
+4. 写一份**阶段汇总**(可放 `.sdlc/validate/summary.md` 或直接体现在 STATE),列每个模式的结果、归因分类与去向。
+5. **输出 `## HANDOFF` → 回写 STATE.md**(经 driver / 单写者,见 §6):更新 stage / status / gates / validate-modes / next。
 
 ---
 
@@ -222,6 +229,9 @@ stage: validate            # 若全过且要进下一阶段,由 driver 推进到
 status: in-progress | gated | blocked
 updated: <由 caller 传入的时间戳，不自造时钟>
 validate-modes: [correctness, e2e, eval-bench]   # 本轮 Step 1 解析出的子集(快照,非持久事实)
+verification-outcome: PASS | CODE_FAILED | ENV_BLOCKED | INCONCLUSIVE
+verification-executed-at: <由 caller 传入的时间戳>
+environment-fingerprint: <运行时版本 + lockfile hash；不含用户名/绝对路径/Host/密钥>
 
 ## Gates passed
 - [x] validate：correctness 通过（套件 + 覆盖率门控）

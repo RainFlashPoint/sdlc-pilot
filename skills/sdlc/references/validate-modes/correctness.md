@@ -228,6 +228,8 @@ ls -d tests/ test/ __tests__/ spec/ e2e/ 2>/dev/null
 mode: correctness
 updated: <stamp>
 runtime: python | node-ts
+verification-outcome: PASS | CODE_FAILED | ENV_BLOCKED | INCONCLUSIVE
+environment-fingerprint: <运行时版本 + lockfile hash；脱敏>
 test-commands: { unit: "pytest", coverage: "pytest --cov=app --cov-fail-under=80", build: "tsc --noEmit" }
 
 ## Summary

@@ -321,6 +321,7 @@ stage: onboard | backlog | spec | plan | build | validate | review | ship | done
 status: in-progress | gated | blocked
 updated: <由 caller 传入的时间戳>
 validate-modes: [correctness, e2e, eval-bench]   # 本次 resolve 出的(§3.4)
+verification-outcome: PASS | CODE_FAILED | ENV_BLOCKED | INCONCLUSIVE | (not-run)
 
 ## Gates passed
 - [x] spec approved

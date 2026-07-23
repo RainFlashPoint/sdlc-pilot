@@ -35,6 +35,9 @@ worktree: <写 STATE 时记 `git rev-parse --show-toplevel`>     # 同上(worktr
 source-leaf: <若本特性源自 requirements 树则记叶 id，否则 (none)>   # Retire 据此回写源叶 status=shipped（见 driver §2 退场前置）
 updated: <时间戳，由调用方传入，例如 2026-06-04T15:30>
 validate-modes: [correctness, e2e, eval-bench]   # 本次运行从 diff 动态解析（见 spec §6.1）；未进入 validate 前可留 []
+verification-outcome: PASS | CODE_FAILED | ENV_BLOCKED | INCONCLUSIVE | (not-run)
+verification-executed-at: <由调用方传入的时间戳或 (not-run)>
+environment-fingerprint: <运行时版本 + lockfile hash；不含用户名/绝对路径/Host/密钥，未验证写 (not-run)>
 sdlc-gate: <未设置>   # sdlc-review 全过(verdict=PASS)时写 `PASS reviewed-head=<HEAD的sha>`，否则写 `BLOCK`。本地 pre-push hook(若装)只认这一行来决定放不放行 push。
 
 <!--
